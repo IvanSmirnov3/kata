@@ -1,0 +1,54 @@
+package web.dao;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.PersistenceContext;
+import org.springframework.stereotype.Repository;
+import web.model.User;
+
+import java.util.List;
+
+@Repository
+public class UserDaoImpl implements UserDao {
+
+    @PersistenceContext
+    private EntityManager em;
+
+    @Override
+    public List<User> findAll() {
+        return em
+                .createQuery("select u from User u", User.class)
+                .getResultList();
+    }
+
+    @Override
+    public User findById(Long id) {
+        User user = em.find(User.class, id);
+        if (user == null) {
+            throw new EntityNotFoundException(
+                    "User with id: " + id + " not found"
+            );
+        }
+        return user;
+    }
+
+    @Override
+    public void addUser(User user) {
+        em.persist(user);
+    }
+
+    @Override
+    public void updateUser(User user) {
+        em.merge(user);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        User user = em.find(User.class, id);
+        if (user != null) {
+            em.remove(user);
+        } else {
+            throw new EntityNotFoundException("User with id: " + id + " not found");
+        }
+    }
+}
