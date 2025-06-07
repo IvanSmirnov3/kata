@@ -39,16 +39,13 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void updateUser(User user) {
+        findById(user.getId());
         em.merge(user);
     }
 
     @Override
     public void deleteById(Long id) {
-        User user = em.find(User.class, id);
-        if (user != null) {
-            em.remove(user);
-        } else {
-            throw new EntityNotFoundException("User with id: " + id + " not found");
-        }
+        User user = findById(id);
+        em.remove(user);
     }
 }
