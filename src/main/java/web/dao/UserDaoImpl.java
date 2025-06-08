@@ -1,10 +1,11 @@
 package web.dao;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.PersistenceContext;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import web.model.User;
+
 
 import java.util.List;
 
@@ -13,6 +14,10 @@ public class UserDaoImpl implements UserDao {
 
     @PersistenceContext
     private EntityManager em;
+
+    public UserDaoImpl(EntityManager em) {
+        this.em = em;
+    }
 
     @Override
     public List<User> findAll() {
